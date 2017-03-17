@@ -3,7 +3,7 @@ require_relative '01_sql_object'
 
 module Searchable
   def where(params)
-    # ...
+    
   end
 end
 
