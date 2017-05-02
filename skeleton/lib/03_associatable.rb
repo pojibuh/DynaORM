@@ -65,20 +65,48 @@ class HasManyOptions < AssocOptions
 end
 
 module Associatable
-  # Phase IIIb
+
   def belongs_to(name, options = {})
-    # ...
+
+    define_method(name) do
+      if options.is_a?(Hash) && options[:foreign_key]
+        foreign_id = { foreign_key: options[:foreign_key] }
+        options = BelongsToOptions.new(name.to_s, foreign_id)
+      elsif options.is_a?(Hash) && options.empty?
+        options = BelongsToOptions.new(name.to_s)
+      end
+
+      foreign_key = self.send(options.foreign_key)
+
+      model = options.model_class
+      model.where(id: foreign_key).first
+    end
   end
 
   def has_many(name, options = {})
-    # ...
+
+    self_class_name = self.to_s
+    define_method(name) do
+      if options.is_a?(Hash) && options[:foreign_key]
+        foreign_id = { foreign_key: options[:foreign_key] }
+        options = HasManyOptions.new(name.to_s, self_class_name, foreign_id)
+      elsif options.is_a?(Hash) && options.empty?
+        options = HasManyOptions.new(name.to_s, self_class_name)
+      end
+      debugger
+      foreign_key = self.send(options.foreign_key)
+
+      model = options.model_class
+      model.where(foreign_key: foreign_key).first
+    end
   end
 
   def assoc_options
-    # Wait to implement this in Phase IVa. Modify `belongs_to`, too.
+
   end
 end
 
 class SQLObject
   # Mixin Associatable here...
+  extend Associatable
 end
