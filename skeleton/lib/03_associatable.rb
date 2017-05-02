@@ -1,7 +1,6 @@
 require_relative '02_searchable'
 require 'active_support/inflector'
 
-# Phase IIIa
 class AssocOptions
   attr_accessor(
     :foreign_key,
@@ -10,7 +9,7 @@ class AssocOptions
   )
 
   def model_class
-    class_name.constantize
+    class_name.to_s.constantize
   end
 
   def table_name
@@ -24,9 +23,9 @@ class BelongsToOptions < AssocOptions
 
   def initialize(name, options = {})
     defaults = {
-      class_name: name.capitalize,
+      class_name: name.to_s.capitalize,
       primary_key: :id,
-      foreign_key: "#{name.underscore}_id".to_sym
+      foreign_key: "#{name.to_s}_id".to_sym
     }
 
     if options.empty?
@@ -47,13 +46,13 @@ class HasManyOptions < AssocOptions
 
   def initialize(name, self_class_name, options = {})
     defaults = {
-      class_name: name.capitalize.singularize,
+      class_name: name.to_s.capitalize.singularize,
       primary_key: :id,
       foreign_key: "#{self_class_name.underscore}_id".to_sym
     }
 
     if options.empty?
-      options = options.merge(defaults)
+      options = defaults
     else
       options = defaults.merge(options)
     end
@@ -68,45 +67,34 @@ module Associatable
 
   def belongs_to(name, options = {})
 
+    self.assoc_options[name] = BelongsToOptions.new(name, options)
+
     define_method(name) do
-      if options.is_a?(Hash) && options[:foreign_key]
-        foreign_id = { foreign_key: options[:foreign_key] }
-        options = BelongsToOptions.new(name.to_s, foreign_id)
-      elsif options.is_a?(Hash) && options.empty?
-        options = BelongsToOptions.new(name.to_s)
-      end
+      options = self.class.assoc_options[name]
 
       foreign_key = self.send(options.foreign_key)
-
-      model = options.model_class
-      model.where(id: foreign_key).first
+      options.model_class.where(options.primary_key => foreign_key).first
     end
   end
 
   def has_many(name, options = {})
+    self.assoc_options[name] = HasManyOptions.new(name, self.name, options)
 
-    self_class_name = self.to_s
     define_method(name) do
-      if options.is_a?(Hash) && options[:foreign_key]
-        foreign_id = { foreign_key: options[:foreign_key] }
-        options = HasManyOptions.new(name.to_s, self_class_name, foreign_id)
-      elsif options.is_a?(Hash) && options.empty?
-        options = HasManyOptions.new(name.to_s, self_class_name)
-      end
-      debugger
-      foreign_key = self.send(options.foreign_key)
+      options = self.class.assoc_options[name]
 
-      model = options.model_class
-      model.where(foreign_key: foreign_key).first
+      foreign_key = self.send(options.primary_key)
+
+      options.model_class.where(options.foreign_key => foreign_key)
     end
   end
 
   def assoc_options
-
+    @assoc_options ||= {}
+    @assoc_options
   end
 end
 
 class SQLObject
-  # Mixin Associatable here...
   extend Associatable
 end
