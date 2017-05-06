@@ -12,7 +12,7 @@ CREATE TABLE humans (
   lname VARCHAR(255) NOT NULL,
   organization_id INTEGER,
 
-  FOREIGN KEY(house_id) REFERENCES human(id)
+  FOREIGN KEY(organization_id) REFERENCES organization(id)
 );
 
 CREATE TABLE organizations (
