@@ -7,8 +7,9 @@ The object relational mapping of DynaORM is based on ActiveRecord, which is used
 ## Demo
 
   1. Clone this repository
-  2. Run demo file in pry
-  3. Enjoy querying the database
+  2. Load `irb` or `pry` in terminal
+  3. Run `load 'demo.rb'`
+  4. Enjoy querying the database
 
 ## Features
 

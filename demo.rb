@@ -1,7 +1,7 @@
 require_relative 'lib/sql_object'
 
-DEMO_DB_FILE = 'sample.db'
-DEMO_SQL_FILE = 'sample.sql'
+SAMPLE_DB_FILE = 'sample.db'
+SAMPLE_SQL_FILE = 'sample.sql'
 
 # SCHEMA
 # Store
