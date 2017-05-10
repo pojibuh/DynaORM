@@ -1,7 +1,6 @@
 require_relative 'lib/sql_object'
-
-SAMPLE_DB_FILE = 'sample.db'
-SAMPLE_SQL_FILE = 'sample.sql'
+require_relative 'lib/db_connection'
+require_relative 'lib/associatable'
 
 # SCHEMA
 # Store
@@ -14,7 +13,7 @@ SAMPLE_SQL_FILE = 'sample.sql'
 # Columns: 'id', 'name'
 
 `rm '#{SAMPLE_DB_FILE}'`
-`sample '#{SAMPLE_SQL_FILE}' | sqlite3 '#{SAMPLE_DB_FILE}'`
+`cat '#{SAMPLE_SQL_FILE}' | sqlite3 '#{SAMPLE_DB_FILE}'`
 
 DBConnection.open(SAMPLE_DB_FILE)
 
@@ -26,14 +25,14 @@ class Store < SQLObject
 end
 
 class Human < SQLObject
-  self.table_name = "trainers"
+  self.table_name = "humans"
   has_many :stores, foreign_key: :owner_id
-  belongs_to :hideout
+  belongs_to :organization
 
   finalize!
 end
 
-class Hideout < SQLObject
+class Organization < SQLObject
   has_many :humans,
     class_name: "Human",
     foreign_key: :organization_id,

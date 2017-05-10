@@ -13,7 +13,7 @@ The object relational mapping of DynaORM is based on ActiveRecord, which is used
 
 ## Features
 
-  * both follows traditional 'convention over configuration' mentality for associations, and allows users to place their own names
+  * Both follows traditional 'convention over configuration' mentality for associations, and allows users to place their own names
   * Intuitive API with similar core features to ActiveRecord::Base
 
 ## Libraries

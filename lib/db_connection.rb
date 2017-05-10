@@ -18,7 +18,7 @@ class DBConnection
   def self.reset
     commands = [
       "rm '#{SAMPLE_DB_FILE}'",
-      "sample '#{SAMPLE_SQL_FILE}' | sqlite3 '#{SAMPLE_DB_FILE}'"
+      "cat '#{SAMPLE_SQL_FILE}' | sqlite3 '#{SAMPLE_DB_FILE}'"
     ]
 
     commands.each { |command| `#{command}` }

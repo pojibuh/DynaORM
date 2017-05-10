@@ -1,4 +1,4 @@
-CREATE TABLE store (
+CREATE TABLE stores (
   id INTEGER PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   owner_id INTEGER,
@@ -34,7 +34,7 @@ VALUES
   (4, "Cody", "Young", NULL);
 
 INSERT INTO
-  store (id, name, owner_id)
+  stores (id, name, owner_id)
 VALUES
   (1, "Chelsea McDonalds", 1),
   (2, "East Village McDonalds", 2),
