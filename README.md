@@ -13,7 +13,22 @@ The object relational mapping of DynaORM is based on ActiveRecord, which is used
 
 ## Features
 
-  * Both follows traditional 'convention over configuration' mentality for associations, and allows users to place their own names
+  * Both follows traditional 'convention over configuration' mentality for associations, and allows users to place their own names. An example is the belongs_to method
+  ```Ruby
+  module Associatable
+    def belongs_to(name, options = {})
+
+      self.assoc_options[name] = BelongsToOptions.new(name, options)
+
+      define_method(name) do
+        options = self.class.assoc_options[name]
+
+        foreign_key = self.send(options.foreign_key)
+        options.model_class.where(options.primary_key => foreign_key).first
+      end
+    end
+  end
+  ```
   * Intuitive API with similar core features to ActiveRecord::Base
 
 ## Libraries
@@ -25,13 +40,18 @@ The object relational mapping of DynaORM is based on ActiveRecord, which is used
 
 After loading the demo file, it is possible to search through tables in the database
 
-```ruby
+```Ruby
 Store.all # returns all the stores in the database
 
 Organization.all.first # returns the first organization
 ```
 
-From there, 
+From there, it is possible to call the appropriate associations on any individual thing in the database.
+
+```Ruby
+first_store = Store.all.first
+first_store.organization # returns the organization that the store belongs to, by means of a has_one_through association
+```
 
 ## API
 
