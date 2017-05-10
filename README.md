@@ -9,7 +9,7 @@ The object relational mapping of DynaORM is based on ActiveRecord, which is used
   1. Clone this repository
   2. Load `irb` or `pry` in terminal
   3. Run `load 'demo.rb'`
-  4. Enjoy querying the database
+  4. Enjoy querying the database (use the demo file as a reference)
 
 ## Features
 
@@ -21,12 +21,24 @@ The object relational mapping of DynaORM is based on ActiveRecord, which is used
   * ActiveSupport::Inflector
   * SQLite3 (gem)
 
+## Examples
+
+After loading the demo file, it is possible to search through tables in the database
+
+```ruby
+Store.all # returns all the stores in the database
+
+Organization.all.first # returns the first organization
+```
+
+From there, 
+
 ## API
 
 Through SQLObject, DynaORM provides many core ActiveRecord methods and associations, such as :
 
-  * has_many
-  * belongs_to
-  * has_one_through
-  * ::where
-  * ::find
+  * `has_many`
+  * `belongs_to`
+  * `has_one_through`
+  * `::where`
+  * `::find`
