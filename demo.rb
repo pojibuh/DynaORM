@@ -18,7 +18,10 @@ require_relative 'lib/associatable'
 DBConnection.open(SAMPLE_DB_FILE)
 
 class Store < SQLObject
-  belongs_to :owner, foreign_key: :owner_id
+  belongs_to :owner,
+    class_name: "Human",
+    foreign_key: :owner_id,
+    primary_key: :id
   has_one_through :organization, :owner, :organization
 
   finalize!
