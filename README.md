@@ -39,7 +39,9 @@ name             | string    | not null
 
 ## Features
 
-  * Both follows traditional 'convention over configuration' mentality for associations, and allows users to place their own names. An example is the belongs_to method
+  * Intuitive API with similar core features to ActiveRecord::Base
+
+  * Both follows traditional 'convention over configuration' mentality for associations, and allows users to place their own names. An example is the belongs_to method, which uses `define_method` to structure a query that returns the instances of a class connected to the one it was called on
   ```Ruby
   module Associatable
     def belongs_to(name, options = {})
@@ -55,7 +57,6 @@ name             | string    | not null
     end
   end
   ```
-  * Intuitive API with similar core features to ActiveRecord::Base
 
 ## Libraries
 
@@ -74,6 +75,26 @@ Organization.where({ id: 2 }) # returns the organization where there is a 2 in t
 Human.find(id) #finds the person with an id matching the one passed in
 ```
 
+In particular, the implementation of the `where` method involves separating the parameters passed into distinct conditions. This allows the user's query to return only what fulfills all the requirements.
+
+```Ruby
+module Searchable
+  def where(params)
+    where_line = params.keys.map { |key| "#{key} = ?" }.join(" AND ")
+    search = DBConnection.execute(<<-SQL, params.values)
+      SELECT
+        *
+      FROM
+        #{self.table_name}
+      WHERE
+        #{where_line}
+    SQL
+    search.map do |el|
+      self.new(el)
+    end
+  end
+end
+```
 From there, it is possible to call the appropriate associations on any individual thing in the database.
 
 ```Ruby
