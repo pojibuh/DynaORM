@@ -9,7 +9,33 @@ The object relational mapping of DynaORM is based on ActiveRecord, which is used
   1. Clone this repository
   2. Run `irb` or `pry` in terminal
   3. Run `load 'demo.rb'`
-  4. Enjoy querying the database (use the demo file as a reference)
+  4. Enjoy querying the database
+
+For reference, here are the tables in the demo database:
+
+### Stores
+
+column name      | data type | details
+-----------------|-----------|------------------------
+id               | integer   | primary key
+name             | string    | not null
+owner_id         | integer   | foreign key (references humans)
+
+### Humans
+
+column name      | data type | details
+-----------------|-----------|------------------------
+id               | integer   | primary key
+fname            | string    | not null
+lname            | string    | not null
+organization_id  | integer   | foreign key (references organizations)
+
+### Organizations
+
+column name      | data type | details
+-----------------|-----------|------------------------
+id               | integer   | primary key
+name             | string    | not null
 
 ## Features
 
