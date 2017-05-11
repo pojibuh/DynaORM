@@ -69,7 +69,9 @@ After loading the demo file, it is possible to search through tables in the data
 ```Ruby
 Store.all # returns all the stores in the database
 
-Organization.all.first # returns the first organization
+Organization.where({ id: 2 }) # returns the organization where there is a 2 in the id column
+
+Human.find(id) #finds the person with an id matching the one passed in
 ```
 
 From there, it is possible to call the appropriate associations on any individual thing in the database.
