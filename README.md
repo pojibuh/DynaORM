@@ -95,7 +95,7 @@ module Searchable
   end
 end
 ```
-From there, it is possible to call the appropriate associations on any individual thing in the database.
+From there, it is possible to call the appropriate associations on any individual thing in the database. This is possible due to the utilization of metaprogramming, which allows for the dynamic creation of new methods. Although metaprogramming is very powerful, it is also initially unintuitive. My solution involved the use of `define_method` and accounting for user input in terms of what the association will be called. Comments could belong to a user or an author, but both will point to the same thing.
 
 ```Ruby
 first_store = Store.all.first
