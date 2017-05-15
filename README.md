@@ -2,7 +2,7 @@
 
 ## Summary
 
-DynaORM is an object relational mapping software inspired by ActiveRecord, which is used in conjunction with Ruby on Rails. DynaORM performs database queries that maintain code DRYness and readability, while operating in a genuinely object-oriented fashion.
+DynaORM is an object relational mapping software inspired by ActiveRecord, which is used in conjunction with frameworks such as Ruby on Rails. DynaORM performs database queries that maintain code DRYness and readability, while operating in a genuinely object-oriented fashion.
 
 ## Demo
 
@@ -41,22 +41,7 @@ name             | string    | not null
 
   * Intuitive API with similar core features to ActiveRecord::Base
 
-  * Both follows traditional 'convention over configuration' mentality for associations, and allows users to place their own names. An example is the belongs_to method, which uses `define_method` to structure a query that returns the instances of a class connected to the one it was called on
-  ```Ruby
-  module Associatable
-    def belongs_to(name, options = {})
-
-      self.assoc_options[name] = BelongsToOptions.new(name, options)
-
-      define_method(name) do
-        options = self.class.assoc_options[name]
-
-        foreign_key = self.send(options.foreign_key)
-        options.model_class.where(options.primary_key => foreign_key).first
-      end
-    end
-  end
-  ```
+  * Both follows traditional 'convention over configuration' mentality for associations, and allows users to place their own names.
 
 ## Libraries
 
@@ -98,16 +83,37 @@ end
 From there, it is possible to call the appropriate associations on any individual thing in the database. This is possible due to the utilization of metaprogramming, which allows for the dynamic creation of new methods. Although metaprogramming is very powerful, it is also initially unintuitive. My solution involved the use of `define_method` and accounting for user input in terms of what the association will be called. Comments could belong to a user or an author, but both will point to the same thing.
 
 ```Ruby
+module Associatable
+  def belongs_to(name, options = {})
+
+    self.assoc_options[name] = BelongsToOptions.new(name, options)
+
+    define_method(name) do
+      options = self.class.assoc_options[name]
+
+      foreign_key = self.send(options.foreign_key)
+      options.model_class.where(options.primary_key => foreign_key).first
+    end
+  end
+end
+```
+
+```Ruby
 first_store = Store.all.first
 first_store.organization # returns the organization that the store belongs to, by means of a has_one_through association
 ```
 
 ## API
 
-Through SQLObject, DynaORM provides many core ActiveRecord methods and associations, such as :
+Through SQLObject, DynaORM provides many methods and associations that allow for an intuitive user experience, such as:
 
   * `has_many`
   * `belongs_to`
   * `has_one_through`
   * `::where`
   * `::find`
+  * `::all`
+  * `::parse_all`
+  * `#update`
+  * `#insert`
+  * `#save`
