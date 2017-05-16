@@ -41,7 +41,7 @@ name             | string    | not null
 
   * Intuitive API with similar core features to ActiveRecord::Base
 
-  * Both follows traditional 'convention over configuration' mentality for associations, and allows users to place their own names.
+  * DynaORM follows traditional 'convention over configuration' mentality for associations, and allows users to place their own names.
 
 ## Libraries
 
